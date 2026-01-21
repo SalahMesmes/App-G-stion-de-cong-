@@ -1,6 +1,5 @@
 # Application de Gestion des Congés
-
-## 🚀 Comment lancer l'application
+Comment lancer l'application
 
 - Installer les dépendances Composer :
   ```bash
@@ -19,8 +18,7 @@
   ```
   http://localhost:8888/App-Géstion%20de%20congé/public/
   ```
-
-## 👤 Comptes de test
+Comptes de test
 
 - **Manager** : `manager@test.com` / `Manager123!`
 - **Employé** : `employe@test.com` / `Employe123!`

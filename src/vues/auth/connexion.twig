@@ -1,0 +1,38 @@
+{% extends "base.twig" %}
+
+{% block titre %}Connexion{% endblock %}
+
+{% block contenu %}
+<div class="row justify-content-center">
+    <div class="col-md-5">
+        <div class="card shadow">
+            <div class="card-header bg-primary text-white text-center">
+                <h4><i class="bi bi-box-arrow-in-right"></i> Connexion</h4>
+            </div>
+            <div class="card-body">
+                {% if erreur %}
+                <div class="alert alert-danger">
+                    <i class="bi bi-exclamation-triangle"></i> {{ erreur }}
+                </div>
+                {% endif %}
+
+                <form method="POST" action="index.php?route=auth/connexion">
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Email</label>
+                        <input type="email" class="form-control" id="email" name="email" required autofocus>
+                    </div>
+                    <div class="mb-3">
+                        <label for="mot_de_passe" class="form-label">Mot de passe</label>
+                        <input type="password" class="form-control" id="mot_de_passe" name="mot_de_passe" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100">
+                        <i class="bi bi-box-arrow-in-right"></i> Se connecter
+                    </button>
+                </form>
+            </div>
+            <div class="card-footer text-muted text-center">
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

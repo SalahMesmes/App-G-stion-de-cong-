@@ -1,0 +1,122 @@
+{% extends "base.twig" %}
+
+{% block titre %}Demandes en attente{% endblock %}
+
+{% block contenu %}
+<h1 class="mb-4">
+    <i class="bi bi-inbox"></i> Demandes en attente
+</h1>
+
+{% if demandes %}
+<div class="card">
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>Employé</th>
+                        <th>Service</th>
+                        <th>Type</th>
+                        <th>Période</th>
+                        <th>Jours</th>
+                        <th>Date de demande</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for demande in demandes %}
+                    <tr>
+                        <td>{{ demande.utilisateur_prenom }} {{ demande.utilisateur_nom }}</td>
+                        <td>{{ demande.service }}</td>
+                        <td>{{ demande.type_conge_libelle }}</td>
+                        <td>
+                            {{ demande.date_debut|date('d/m/Y') }}
+                            {% if demande.date_fin != demande.date_debut %}
+                                - {{ demande.date_fin|date('d/m/Y') }}
+                            {% endif %}
+                            {% if demande.demi_journee != 'NONE' %}
+                                <span class="badge bg-info">{{ demande.demi_journee }}</span>
+                            {% endif %}
+                        </td>
+                        <td><strong>{{ demande.jours_ouvres }}</strong></td>
+                        <td>{{ demande.created_at|date('d/m/Y H:i') }}</td>
+                        <td>
+                            <button type="button" class="btn btn-sm btn-success" data-bs-toggle="modal" 
+                                    data-bs-target="#modalAccepter{{ demande.id }}">
+                                <i class="bi bi-check-circle"></i> Accepter
+                            </button>
+                            <button type="button" class="btn btn-sm btn-danger" data-bs-toggle="modal" 
+                                    data-bs-target="#modalRefuser{{ demande.id }}">
+                                <i class="bi bi-x-circle"></i> Refuser
+                            </button>
+                            <a href="index.php?route=conge/voir&id={{ demande.id }}" class="btn btn-sm btn-outline-primary">
+                                <i class="bi bi-eye"></i>
+                            </a>
+                        </td>
+                    </tr>
+
+                    {# Modal Accepter #}
+                    <div class="modal fade" id="modalAccepter{{ demande.id }}" tabindex="-1">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <form method="POST" action="index.php?route=manager/conge/accepter">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title">Accepter la demande</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <p>Êtes-vous sûr de vouloir accepter cette demande ?</p>
+                                        <input type="hidden" name="id" value="{{ demande.id }}">
+                                        <div class="mb-3">
+                                            <label for="commentaire_accept{{ demande.id }}" class="form-label">Commentaire (optionnel)</label>
+                                            <textarea class="form-control" id="commentaire_accept{{ demande.id }}" 
+                                                      name="commentaire_decision" rows="3"></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                                        <button type="submit" class="btn btn-success">Accepter</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+                    {# Modal Refuser #}
+                    <div class="modal fade" id="modalRefuser{{ demande.id }}" tabindex="-1">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <form method="POST" action="index.php?route=manager/conge/refuser">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title">Refuser la demande</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <p>Êtes-vous sûr de vouloir refuser cette demande ?</p>
+                                        <input type="hidden" name="id" value="{{ demande.id }}">
+                                        <div class="mb-3">
+                                            <label for="commentaire_refuse{{ demande.id }}" class="form-label">Commentaire (recommandé)</label>
+                                            <textarea class="form-control" id="commentaire_refuse{{ demande.id }}" 
+                                                      name="commentaire_decision" rows="3"></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                                        <button type="submit" class="btn btn-danger">Refuser</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% else %}
+<div class="alert alert-info">
+    <i class="bi bi-info-circle"></i> Aucune demande en attente.
+</div>
+{% endif %}
+{% endblock %}

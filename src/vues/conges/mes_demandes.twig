@@ -1,0 +1,81 @@
+{% extends "base.twig" %}
+
+{% block titre %}Mes demandes{% endblock %}
+
+{% block contenu %}
+<h1 class="mb-4">
+    <i class="bi bi-list-ul"></i> Mes demandes de congé
+</h1>
+
+<div class="card">
+    <div class="card-body">
+        {% if demandes %}
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>Type</th>
+                        <th>Période</th>
+                        <th>Jours ouvrés</th>
+                        <th>Statut</th>
+                        <th>Date de création</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for demande in demandes %}
+                    <tr>
+                        <td>{{ demande.type_conge_libelle }}</td>
+                        <td>
+                            {{ demande.date_debut|date('d/m/Y') }}
+                            {% if demande.date_fin != demande.date_debut %}
+                                - {{ demande.date_fin|date('d/m/Y') }}
+                            {% endif %}
+                            {% if demande.demi_journee != 'NONE' %}
+                                <span class="badge bg-info">{{ demande.demi_journee }}</span>
+                            {% endif %}
+                        </td>
+                        <td><strong>{{ demande.jours_ouvres }}</strong></td>
+                        <td>
+                            {% if demande.statut == 'EN_ATTENTE' %}
+                                <span class="badge bg-warning">En attente</span>
+                            {% elseif demande.statut == 'ACCEPTE' %}
+                                <span class="badge bg-success">Accepté</span>
+                            {% elseif demande.statut == 'REFUSE' %}
+                                <span class="badge bg-danger">Refusé</span>
+                            {% else %}
+                                <span class="badge bg-secondary">Annulé</span>
+                            {% endif %}
+                        </td>
+                        <td>{{ demande.created_at|date('d/m/Y H:i') }}</td>
+                        <td>
+                            <a href="index.php?route=conge/voir&id={{ demande.id }}" class="btn btn-sm btn-outline-primary">
+                                <i class="bi bi-eye"></i>
+                            </a>
+                            {% if demande.statut == 'EN_ATTENTE' %}
+                            <form method="POST" action="index.php?route=conge/annuler" class="d-inline" 
+                                  onsubmit="return confirm('Êtes-vous sûr de vouloir annuler cette demande ?');">
+                                <input type="hidden" name="id" value="{{ demande.id }}">
+                                <button type="submit" class="btn btn-sm btn-outline-danger">
+                                    <i class="bi bi-x-circle"></i>
+                                </button>
+                            </form>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div class="text-center py-5">
+            <i class="bi bi-inbox" style="font-size: 3rem; color: #ccc;"></i>
+            <p class="text-muted mt-3">Aucune demande pour le moment.</p>
+            <a href="index.php?route=conge/creer" class="btn btn-primary">
+                <i class="bi bi-plus-circle"></i> Créer une demande
+            </a>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

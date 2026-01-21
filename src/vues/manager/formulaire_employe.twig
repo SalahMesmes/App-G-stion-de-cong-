@@ -1,0 +1,104 @@
+{% extends "base.twig" %}
+
+{% block titre %}{{ action == 'creer' ? 'Nouvel employé' : 'Modifier employé' }}{% endblock %}
+
+{% block contenu %}
+<h1 class="mb-4">
+    <i class="bi bi-{{ action == 'creer' ? 'plus-circle' : 'pencil' }}"></i> 
+    {{ action == 'creer' ? 'Nouvel employé' : 'Modifier employé' }}
+</h1>
+
+{% if erreurs %}
+<div class="alert alert-danger">
+    <h5><i class="bi bi-exclamation-triangle"></i> Erreurs :</h5>
+    <ul class="mb-0">
+        {% for erreur in erreurs %}
+        <li>{{ erreur }}</li>
+        {% endfor %}
+    </ul>
+</div>
+{% endif %}
+
+<div class="row">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-body">
+                <form method="POST">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="nom" class="form-label">Nom <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="nom" name="nom" 
+                                       value="{{ donnees.nom }}" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="prenom" class="form-label">Prénom <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="prenom" name="prenom" 
+                                       value="{{ donnees.prenom }}" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Email <span class="text-danger">*</span></label>
+                        <input type="email" class="form-control" id="email" name="email" 
+                               value="{{ donnees.email }}" required>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="service" class="form-label">Service <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="service" name="service" 
+                                       value="{{ donnees.service }}" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="poste" class="form-label">Poste <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="poste" name="poste" 
+                                       value="{{ donnees.poste }}" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="date_embauche" class="form-label">Date d'embauche <span class="text-danger">*</span></label>
+                        <input type="date" class="form-control" id="date_embauche" name="date_embauche" 
+                               value="{{ donnees.date_embauche }}" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="role" class="form-label">Rôle <span class="text-danger">*</span></label>
+                        <select class="form-select" id="role" name="role" required>
+                            <option value="EMPLOYE" {{ donnees.role == 'EMPLOYE' ? 'selected' : '' }}>Employé</option>
+                            <option value="MANAGER" {{ donnees.role == 'MANAGER' ? 'selected' : '' }}>Manager</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="mot_de_passe" class="form-label">
+                            Mot de passe <span class="text-danger">*</span>
+                            {% if action == 'modifier' %}
+                            <small class="text-muted">(laisser vide pour ne pas modifier)</small>
+                            {% endif %}
+                        </label>
+                        <input type="password" class="form-control" id="mot_de_passe" name="mot_de_passe" 
+                               {{ action == 'creer' ? 'required' : '' }} minlength="6">
+                        <small class="text-muted">Minimum 6 caractères</small>
+                    </div>
+
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                        <a href="index.php?route=manager/employes" class="btn btn-secondary">Annuler</a>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="bi bi-check-circle"></i> {{ action == 'creer' ? 'Créer' : 'Modifier' }}
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

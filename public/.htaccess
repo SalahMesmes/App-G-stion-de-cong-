@@ -1,0 +1,5 @@
+# Sécurité : empêcher l'accès direct aux fichiers sensibles
+<FilesMatch "\.(php|twig)$">
+    Order Allow,Deny
+    Allow from all
+</FilesMatch>

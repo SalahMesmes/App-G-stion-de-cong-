@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block titre %}Gestion des Congés{% endblock %} - {{ app_name }}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <style>
+        /* Style pour les employés */
+        body.role-employe {
+            background-color: #f8f9fa;
+        }
+        body.role-employe .navbar {
+            background-color: #0d6efd !important;
+        }
+        body.role-employe .card {
+            border-left: 4px solid #0d6efd;
+        }
+        
+        /* Style pour les managers - Jaune et Blanc */
+        body.role-manager {
+            background-color: #fffef7;
+        }
+        body.role-manager .navbar {
+            background-color: #ffc107 !important;
+        }
+        body.role-manager .navbar .nav-link {
+            color: #000 !important;
+        }
+        body.role-manager .navbar .navbar-brand {
+            color: #000 !important;
+        }
+        body.role-manager .card {
+            border-left: 4px solid #ffc107;
+            background-color: #ffffff;
+        }
+        body.role-manager .card-header {
+            background-color: #fffef0;
+            border-bottom: 2px solid #ffc107;
+        }
+        
+        /* Badge de notification */
+        .dropdown-item.notification-badge {
+            position: relative;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .dropdown-item.notification-badge .badge {
+            background-color: #dc3545;
+            color: white;
+            border-radius: 50%;
+            padding: 2px 6px;
+            font-size: 11px;
+            min-width: 18px;
+            text-align: center;
+            margin-left: auto;
+        }
+        
+        /* Animation pour les messages flash */
+        .alert {
+            animation: slideIn 0.3s ease-out;
+        }
+        
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .alert.fade-out {
+            animation: fadeOut 0.5s ease-out forwards;
+        }
+        
+        @keyframes fadeOut {
+            from {
+                opacity: 1;
+                transform: translateY(0);
+            }
+            to {
+                opacity: 0;
+                transform: translateY(-20px);
+                max-height: 0;
+                margin: 0;
+                padding: 0;
+            }
+        }
+    </style>
+</head>
+<body class="{% if utilisateur is defined %}role-{{ utilisateur.role|lower }}{% else %}role-employe{% endif %}">
+    {% if utilisateur is defined %}
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="index.php?route=tableau-de-bord">
+                <i class="bi bi-calendar-check"></i> {{ app_name }}
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.php?route=tableau-de-bord">
+                            <i class="bi bi-house"></i> Tableau de bord
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.php?route=conge/creer">
+                            <i class="bi bi-plus-circle"></i> Nouvelle demande
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.php?route=conge/mes-demandes">
+                            <i class="bi bi-list-ul"></i> Mes demandes
+                        </a>
+                    </li>
+                    {% if utilisateur.role == 'MANAGER' %}
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                            <i class="bi bi-gear"></i> Administration
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a class="dropdown-item notification-badge" href="index.php?route=manager/demandes">
+                                    <i class="bi bi-inbox"></i> Demandes en attente
+                                    {% if nb_demandes_attente is defined and nb_demandes_attente > 0 %}
+                                        <span class="badge">{{ nb_demandes_attente }}</span>
+                                    {% endif %}
+                                </a>
+                            </li>
+                            <li><a class="dropdown-item" href="index.php?route=manager/employes">
+                                <i class="bi bi-people"></i> Employés
+                            </a></li>
+                            <li><a class="dropdown-item" href="index.php?route=manager/types-conges">
+                                <i class="bi bi-tags"></i> Types de congés
+                            </a></li>
+                        </ul>
+                    </li>
+                    {% endif %}
+                </ul>
+                <ul class="navbar-nav">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                            <i class="bi bi-person-circle"></i> {{ utilisateur.prenom }} {{ utilisateur.nom }}
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><span class="dropdown-item-text">
+                                <small>{{ utilisateur.email }}</small><br>
+                                <span class="badge bg-secondary">{{ utilisateur.role }}</span>
+                            </span></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="index.php?route=auth/deconnexion">
+                                <i class="bi bi-box-arrow-right"></i> Déconnexion
+                            </a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    {% endif %}
+
+    <div class="container mt-4">
+        {# Messages flash #}
+        {% set messages = flash_messages() %}
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-{{ message.type == 'error' ? 'danger' : message.type }} alert-dismissible fade show" role="alert">
+                    {{ message.message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        {# Contenu de la page #}
+        {% block contenu %}{% endblock %}
+    </div>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Disparition automatique des messages flash après 5 secondes
+        document.addEventListener('DOMContentLoaded', function() {
+            const alerts = document.querySelectorAll('.alert');
+            alerts.forEach(function(alert) {
+                // Démarrer le timer pour disparaître après 5 secondes
+                setTimeout(function() {
+                    alert.classList.add('fade-out');
+                    // Supprimer l'élément après l'animation
+                    setTimeout(function() {
+                        alert.remove();
+                    }, 500);
+                }, 5000);
+            });
+        });
+    </script>
+    {% block scripts %}{% endblock %}
+</body>
+</html>

@@ -1,0 +1,19 @@
+# Dépendances
+/vendor/
+
+# Uploads
+/public/uploads/*
+!/public/uploads/.gitkeep
+
+# Configuration locale (si nécessaire)
+# /config/configuration.local.php
+
+# Fichiers système
+.DS_Store
+Thumbs.db
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo

@@ -1,0 +1,74 @@
+{% extends "base.twig" %}
+
+{% block titre %}{{ action == 'creer' ? 'Nouveau type de congé' : 'Modifier type de congé' }}{% endblock %}
+
+{% block contenu %}
+<h1 class="mb-4">
+    <i class="bi bi-{{ action == 'creer' ? 'plus-circle' : 'pencil' }}"></i> 
+    {{ action == 'creer' ? 'Nouveau type de congé' : 'Modifier type de congé' }}
+</h1>
+
+{% if erreurs %}
+<div class="alert alert-danger">
+    <h5><i class="bi bi-exclamation-triangle"></i> Erreurs :</h5>
+    <ul class="mb-0">
+        {% for erreur in erreurs %}
+        <li>{{ erreur }}</li>
+        {% endfor %}
+    </ul>
+</div>
+{% endif %}
+
+<div class="row">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-body">
+                <form method="POST">
+                    <div class="mb-3">
+                        <label for="code" class="form-label">Code <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" id="code" name="code" 
+                               value="{{ donnees.code }}" required maxlength="50" style="text-transform: uppercase;">
+                        <small class="text-muted">Code unique (ex: CP, RTT, MALADIE)</small>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="libelle" class="form-label">Libellé <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" id="libelle" name="libelle" 
+                               value="{{ donnees.libelle }}" required>
+                        <small class="text-muted">Nom complet du type de congé</small>
+                    </div>
+
+                    <div class="mb-3">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="justificatif_obligatoire" 
+                                   name="justificatif_obligatoire" 
+                                   {{ donnees.justificatif_obligatoire ? 'checked' : '' }}>
+                            <label class="form-check-label" for="justificatif_obligatoire">
+                                Justificatif obligatoire
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="actif" 
+                                   name="actif" 
+                                   {{ donnees.actif is not defined or donnees.actif ? 'checked' : '' }}>
+                            <label class="form-check-label" for="actif">
+                                Actif (visible pour les employés)
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                        <a href="index.php?route=manager/types-conges" class="btn btn-secondary">Annuler</a>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="bi bi-check-circle"></i> {{ action == 'creer' ? 'Créer' : 'Modifier' }}
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

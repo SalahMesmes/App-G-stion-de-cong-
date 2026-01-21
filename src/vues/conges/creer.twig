@@ -1,0 +1,118 @@
+{% extends "base.twig" %}
+
+{% block titre %}Nouvelle demande de congé{% endblock %}
+
+{% block contenu %}
+<h1 class="mb-4">
+    <i class="bi bi-plus-circle"></i> Nouvelle demande de congé
+</h1>
+
+{% if erreurs %}
+<div class="alert alert-danger">
+    <h5><i class="bi bi-exclamation-triangle"></i> Erreurs :</h5>
+    <ul class="mb-0">
+        {% for erreur in erreurs %}
+        <li>{{ erreur }}</li>
+        {% endfor %}
+    </ul>
+</div>
+{% endif %}
+
+<div class="row">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-body">
+                <form method="POST" enctype="multipart/form-data">
+                    <div class="mb-3">
+                        <label for="type_conge_id" class="form-label">Type de congé <span class="text-danger">*</span></label>
+                        <select class="form-select" id="type_conge_id" name="type_conge_id" required>
+                            <option value="">-- Sélectionner --</option>
+                            {% for type in typesConge %}
+                            <option value="{{ type.id }}" {{ donnees.type_conge_id == type.id ? 'selected' : '' }}>
+                                {{ type.libelle }}
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="date_debut" class="form-label">Date de début <span class="text-danger">*</span></label>
+                                <input type="date" class="form-control" id="date_debut" name="date_debut" 
+                                       value="{{ donnees.date_debut }}" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="date_fin" class="form-label">Date de fin <span class="text-danger">*</span></label>
+                                <input type="date" class="form-control" id="date_fin" name="date_fin" 
+                                       value="{{ donnees.date_fin }}" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Demi-journée</label>
+                        <div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="demi_journee" id="demi_none" 
+                                       value="NONE" {{ (donnees.demi_journee ?? 'NONE') == 'NONE' ? 'checked' : '' }}>
+                                <label class="form-check-label" for="demi_none">Journée complète</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="demi_journee" id="demi_am" value="AM"
+                                       {{ donnees.demi_journee == 'AM' ? 'checked' : '' }}>
+                                <label class="form-check-label" for="demi_am">Matin (AM)</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="demi_journee" id="demi_pm" value="PM"
+                                       {{ donnees.demi_journee == 'PM' ? 'checked' : '' }}>
+                                <label class="form-check-label" for="demi_pm">Après-midi (PM)</label>
+                            </div>
+                        </div>
+                        <small class="text-muted">La demi-journée n'est autorisée que si la date de début et de fin sont identiques.</small>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="motif" class="form-label">Motif</label>
+                        <textarea class="form-control" id="motif" name="motif" rows="3">{{ donnees.motif }}</textarea>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="commentaire" class="form-label">Commentaire</label>
+                        <textarea class="form-control" id="commentaire" name="commentaire" rows="3">{{ donnees.commentaire }}</textarea>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="justificatif" class="form-label">Justificatif</label>
+                        <input type="file" class="form-control" id="justificatif" name="justificatif" 
+                               accept=".jpg,.jpeg,.png,.pdf">
+                        <small class="text-muted">Formats acceptés : JPG, PNG, PDF (max 5 Mo)</small>
+                    </div>
+
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                        <a href="index.php?route=tableau-de-bord" class="btn btn-secondary">Annuler</a>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="bi bi-check-circle"></i> Créer la demande
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card bg-light">
+            <div class="card-body">
+                <h5><i class="bi bi-info-circle"></i> Informations</h5>
+                <ul>
+                    <li>Les jours ouvrés sont calculés du lundi au vendredi uniquement.</li>
+                    <li>Une demi-journée = 0.5 jour ouvré.</li>
+                    <li>Les chevauchements avec des demandes en attente ou acceptées sont interdits.</li>
+                    <li>Certains types de congés nécessitent un justificatif obligatoire.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

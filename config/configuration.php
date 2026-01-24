@@ -1,8 +1,4 @@
 <?php
-/**
- * Configuration de l'application
- * BTS SIO SLAM - Gestion des congés
- */
 
 // Configuration de la base de données (MAMP)
 define('DB_HOST', 'localhost');

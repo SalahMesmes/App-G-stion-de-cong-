@@ -1,9 +1,4 @@
 <?php
-/**
- * Helper Flash Messages
- * Gère les messages flash pour l'utilisateur
- * BTS SIO SLAM
- */
 
 namespace App\Helpers;
 

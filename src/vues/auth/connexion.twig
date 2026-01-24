@@ -3,10 +3,28 @@
 {% block titre %}Connexion{% endblock %}
 
 {% block contenu %}
-<div class="row justify-content-center">
-    <div class="col-md-5">
+<style>
+    .login-container {
+        min-height: calc(100vh - 200px);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .login-card {
+        width: 100%;
+        max-width: 450px;
+    }
+    .login-button {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+    }
+</style>
+<div class="login-container">
+    <div class="login-card">
         <div class="card shadow">
-            <div class="card-header bg-primary text-white text-center">
+            <div class="card-header text-center" style="background-color: #ffc107; color: #000;">
                 <h4><i class="bi bi-box-arrow-in-right"></i> Connexion</h4>
             </div>
             <div class="card-body">
@@ -25,9 +43,11 @@
                         <label for="mot_de_passe" class="form-label">Mot de passe</label>
                         <input type="password" class="form-control" id="mot_de_passe" name="mot_de_passe" required>
                     </div>
-                    <button type="submit" class="btn btn-primary w-100">
-                        <i class="bi bi-box-arrow-in-right"></i> Se connecter
-                    </button>
+                    <div class="d-flex justify-content-center">
+                        <button type="submit" class="btn login-button" style="background-color: #ffc107; border-color: #ffc107; color: #000; font-weight: 500;">
+                            <i class="bi bi-box-arrow-in-right"></i> Se connecter
+                        </button>
+                    </div>
                 </form>
             </div>
             <div class="card-footer text-muted text-center">

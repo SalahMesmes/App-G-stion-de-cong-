@@ -1,9 +1,4 @@
 <?php
-/**
- * Helper Twig
- * Centralise la configuration de Twig
- * BTS SIO SLAM
- */
 
 namespace App\Helpers;
 

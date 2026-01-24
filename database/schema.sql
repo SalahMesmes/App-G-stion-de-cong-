@@ -1,13 +1,8 @@
--- ============================================
--- SCHEMA BASE DE DONNÉES - GESTION DES CONGÉS
--- BTS SIO SLAM
--- ============================================
-
 -- Base de données
 CREATE DATABASE IF NOT EXISTS gestion_conges CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 USE gestion_conges;
 
--- Table : Utilisateur (Employé)
+-- Utilisateur (Employé)
 CREATE TABLE IF NOT EXISTS utilisateur (
     id INT AUTO_INCREMENT PRIMARY KEY,
     nom VARCHAR(100) NOT NULL,
@@ -23,7 +18,7 @@ CREATE TABLE IF NOT EXISTS utilisateur (
     INDEX idx_role (role)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Table : Type de congé
+-- Type de congé
 CREATE TABLE IF NOT EXISTS type_conge (
     id INT AUTO_INCREMENT PRIMARY KEY,
     code VARCHAR(50) NOT NULL UNIQUE,
@@ -34,7 +29,7 @@ CREATE TABLE IF NOT EXISTS type_conge (
     INDEX idx_actif (actif)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Table : Demande de congé
+--  Demande de congé
 CREATE TABLE IF NOT EXISTS demande_conge (
     id INT AUTO_INCREMENT PRIMARY KEY,
     utilisateur_id INT NOT NULL,

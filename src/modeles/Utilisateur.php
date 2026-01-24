@@ -1,10 +1,4 @@
 <?php
-/**
- * Modèle Utilisateur
- * Gère les opérations CRUD sur les utilisateurs
- * BTS SIO SLAM
- */
-
 namespace App\Modeles;
 
 use App\Modeles\BaseDeDonnees;

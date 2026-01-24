@@ -1,9 +1,5 @@
 <?php
-/**
- * Contrôleur Tableau de bord
- * Page d'accueil après connexion
- * BTS SIO SLAM
- */
+
 
 namespace App\Controleurs;
 

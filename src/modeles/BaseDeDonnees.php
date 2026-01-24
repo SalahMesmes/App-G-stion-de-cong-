@@ -1,9 +1,4 @@
 <?php
-/**
- * Classe de connexion à la base de données
- * Utilise PDO avec requêtes préparées pour la sécurité
- * BTS SIO SLAM
- */
 
 namespace App\Modeles;
 

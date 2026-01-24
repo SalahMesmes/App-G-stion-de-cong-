@@ -1,9 +1,4 @@
 <?php
-/**
- * Modèle DemandeConge
- * Gère les demandes de congés
- * BTS SIO SLAM
- */
 
 namespace App\Modeles;
 

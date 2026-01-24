@@ -1,9 +1,4 @@
 <?php
-/**
- * Contrôleur Congé
- * Gère les demandes de congés pour les employés
- * BTS SIO SLAM
- */
 
 namespace App\Controleurs;
 

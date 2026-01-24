@@ -1,9 +1,4 @@
 <?php
-/**
- * Contrôleur d'authentification
- * Gère la connexion et la déconnexion
- * BTS SIO SLAM
- */
 
 namespace App\Controleurs;
 
@@ -15,12 +10,11 @@ use App\Middleware\Authentification;
 
 class ControleurAuth
 {
-    /**
-     * Afficher le formulaire de connexion
-     */
+    //Afficher le formulaire de connexion
+     
     public function connexion(): void
     {
-        // Si déjà connecté, rediriger vers le tableau de bord
+        // Si déjà connecté rediriger vers le tableau de bord
         if (Authentification::estConnecte()) {
             header('Location: index.php?route=tableau-de-bord');
             exit;
@@ -59,9 +53,8 @@ class ControleurAuth
         ]);
     }
 
-    /**
-     * Déconnexion
-     */
+    //Déconnexion
+     
     public function deconnexion(): void
     {
         session_destroy();

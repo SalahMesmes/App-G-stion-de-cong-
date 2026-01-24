@@ -1,9 +1,4 @@
 <?php
-/**
- * Script pour générer les hash de mots de passe
- * À exécuter pour mettre à jour seed.sql avec les vrais hash
- * BTS SIO SLAM
- */
 
 echo "=== Génération des hash de mots de passe ===\n\n";
 

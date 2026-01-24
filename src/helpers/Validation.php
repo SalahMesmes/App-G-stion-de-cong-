@@ -1,9 +1,4 @@
 <?php
-/**
- * Helper Validation
- * Fonctions de validation des données
- * BTS SIO SLAM
- */
 
 namespace App\Helpers;
 

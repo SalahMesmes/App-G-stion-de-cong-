@@ -1,9 +1,4 @@
 <?php
-/**
- * Contrôleur Manager
- * Gère les fonctionnalités réservées aux managers
- * BTS SIO SLAM
- */
 
 namespace App\Controleurs;
 
@@ -17,9 +12,8 @@ use App\Helpers\Validation;
 
 class ControleurManager
 {
-    /**
-     * Lister les demandes en attente
-     */
+    //Lister les demandes en attente
+     
     public function demandes(): void
     {
         Authentification::verifierManager();
@@ -318,10 +312,16 @@ class ControleurManager
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $donnees = [
                 'code' => strtoupper(Validation::nettoyer($_POST['code'] ?? '')),
-                'libelle' => Validation::nettoyer($_POST['libelle'] ?? ''),
-                'justificatif_obligatoire' => isset($_POST['justificatif_obligatoire']),
-                'actif' => isset($_POST['actif'])
+                'libelle' => Validation::nettoyer($_POST['libelle'] ?? '')
             ];
+            
+            // Ne définir les checkboxes que si elles sont cochées
+            if (isset($_POST['justificatif_obligatoire'])) {
+                $donnees['justificatif_obligatoire'] = true;
+            }
+            if (isset($_POST['actif'])) {
+                $donnees['actif'] = true;
+            }
 
             // Validation
             if (empty($donnees['code'])) $erreurs[] = 'Le code est obligatoire.';
@@ -350,7 +350,15 @@ class ControleurManager
     {
         Authentification::verifierManager();
         
-        $id = (int) ($_GET['id'] ?? 0);
+        // Récupérer l'ID depuis GET ou POST
+        $id = (int) ($_GET['id'] ?? $_POST['id'] ?? 0);
+        
+        if ($id === 0) {
+            Flash::error('ID du type de congé manquant.');
+            header('Location: index.php?route=manager/types-conges');
+            exit;
+        }
+        
         $type = TypeConge::trouverParId($id);
         
         if (!$type) {
@@ -366,13 +374,26 @@ class ControleurManager
             $donnees = [
                 'code' => strtoupper(Validation::nettoyer($_POST['code'] ?? '')),
                 'libelle' => Validation::nettoyer($_POST['libelle'] ?? ''),
-                'justificatif_obligatoire' => isset($_POST['justificatif_obligatoire']),
-                'actif' => isset($_POST['actif'])
+                'justificatif_obligatoire' => isset($_POST['justificatif_obligatoire']) ? true : false,
+                'actif' => isset($_POST['actif']) ? true : false
             ];
 
             // Validation
-            if (empty($donnees['code'])) $erreurs[] = 'Le code est obligatoire.';
-            if (empty($donnees['libelle'])) $erreurs[] = 'Le libellé est obligatoire.';
+            if (empty($donnees['code'])) {
+                $erreurs[] = 'Le code est obligatoire.';
+            } else {
+                // Vérifier si le code existe déjà pour un autre type de congé
+                $db = \App\Modeles\BaseDeDonnees::getInstance();
+                $stmtCheck = $db->prepare('SELECT id FROM type_conge WHERE code = ? AND id != ?');
+                $stmtCheck->execute([$donnees['code'], $id]);
+                if ($stmtCheck->fetch()) {
+                    $erreurs[] = 'Ce code est déjà utilisé par un autre type de congé.';
+                }
+            }
+            
+            if (empty($donnees['libelle'])) {
+                $erreurs[] = 'Le libellé est obligatoire.';
+            }
 
             if (empty($erreurs)) {
                 if (TypeConge::modifier($id, $donnees)) {
@@ -380,7 +401,7 @@ class ControleurManager
                     header('Location: index.php?route=manager/types-conges');
                     exit;
                 } else {
-                    $erreurs[] = 'Erreur lors de la modification.';
+                    $erreurs[] = 'Erreur lors de la modification. Veuillez réessayer.';
                 }
             }
         }
@@ -409,10 +430,12 @@ class ControleurManager
 
         $id = (int) ($_POST['id'] ?? 0);
 
-        if (TypeConge::supprimer($id)) {
+        $result = TypeConge::supprimer($id);
+        if ($result === true) {
             Flash::success('Type de congé supprimé avec succès.');
         } else {
-            Flash::error('Erreur lors de la suppression.');
+            // $result contient le message d'erreur
+            Flash::error(is_string($result) ? $result : 'Erreur lors de la suppression.');
         }
 
         header('Location: index.php?route=manager/types-conges');

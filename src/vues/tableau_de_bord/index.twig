@@ -7,17 +7,9 @@
     <i class="bi bi-house"></i> Tableau de bord
 </h1>
 
-<div class="row mb-4">
+<div class="row mb-4 justify-content-center">
     <div class="col-md-3">
-        <div class="card text-white bg-primary">
-            <div class="card-body">
-                <h5 class="card-title">Total</h5>
-                <h2>{{ stats.total }}</h2>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-3">
-        <div class="card text-white bg-warning">
+        <div class="card" style="background-color: #ffb300; color: #000;">
             <div class="card-body">
                 <h5 class="card-title">En attente</h5>
                 <h2>{{ stats.en_attente }}</h2>
@@ -25,7 +17,7 @@
         </div>
     </div>
     <div class="col-md-3">
-        <div class="card text-white bg-success">
+        <div class="card" style="background-color: #6c757d; color: #fff;">
             <div class="card-body">
                 <h5 class="card-title">Acceptées</h5>
                 <h2>{{ stats.acceptees }}</h2>
@@ -33,7 +25,7 @@
         </div>
     </div>
     <div class="col-md-3">
-        <div class="card text-white bg-danger">
+        <div class="card" style="background-color: #495057; color: #fff;">
             <div class="card-body">
                 <h5 class="card-title">Refusées</h5>
                 <h2>{{ stats.refusees }}</h2>

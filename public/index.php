@@ -1,14 +1,5 @@
 <?php
-/**
- * Point d'entrée de l'application
- * Routing simple via query string
- * BTS SIO SLAM - Gestion des congés
- */
 
-// Activer l'affichage des erreurs en développement
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
 
 // Charger la configuration
 require_once dirname(__DIR__) . '/config/configuration.php';
@@ -50,7 +41,7 @@ $controllerMap = [
     'manager' => 'ControleurManager'
 ];
 
-// Mapping des actions (nom route => nom méthode)
+// Mapping des actions
 $actionMap = [
     'auth' => [
         'connexion' => 'connexion',

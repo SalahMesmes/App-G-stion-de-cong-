@@ -1,15 +1,20 @@
 <?php
 
-// Configuration de la base de données (MAMP)
+// Configuration de la base de données distante (hébergement)
 define('DB_HOST', 'localhost');
-define('DB_PORT', '8889'); // Port MySQL par défaut de MAMP
-define('DB_NAME', 'gestion_conges');
-define('DB_USER', 'root');
-define('DB_PASS', 'root'); // Mot de passe par défaut MAMP
+define('DB_PORT', '3306');
+define('DB_NAME', 'salahmestaoui_db2');
+define('DB_USER', 'salahmestaoui_db2');
+define('DB_PASS', 'Salahmesmes123@');
 
 // Configuration de l'application
 define('APP_NAME', 'Gestion des Congés');
-define('APP_URL', 'http://localhost:8888/App-Géstion%20de%20congé/public');
+// URL de base détectée automatiquement (fonctionne en local et en production)
+$protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http';
+$host = $_SERVER['HTTP_HOST'] ?? 'localhost';
+$scriptPath = dirname($_SERVER['SCRIPT_NAME'] ?? '/');
+$scriptPath = str_replace('\\', '/', $scriptPath);
+define('APP_URL', $protocol . '://' . $host . rtrim($scriptPath, '/'));
 
 // Chemins
 define('ROOT_PATH', dirname(__DIR__));

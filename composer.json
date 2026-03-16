@@ -8,6 +8,10 @@
     },
     "autoload": {
         "psr-4": {
+            "App\\Controleurs\\": "src/controleurs/",
+            "App\\Modeles\\": "src/modeles/",
+            "App\\Helpers\\": "src/helpers/",
+            "App\\Middleware\\": "src/middleware/",
             "App\\": "src/"
         }
     }

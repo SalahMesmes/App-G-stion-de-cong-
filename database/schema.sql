@@ -53,3 +53,13 @@ CREATE TABLE IF NOT EXISTS demande_conge (
     INDEX idx_statut (statut),
     INDEX idx_dates (date_debut, date_fin)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+
+-- Types de congés par défaut
+INSERT INTO type_conge (code, libelle, justificatif_obligatoire, actif) VALUES
+('CP', 'Congés Payés', 0, 1),
+('RTT', 'Récupération du Temps de Travail', 0, 1),
+('MALADIE', 'Arrêt Maladie', 1, 1),
+('MATERNITE', 'Congé Maternité', 1, 1),
+('PATERNITE', 'Congé Paternité', 1, 1),
+('EXCEPTIONNEL', 'Congé Exceptionnel', 0, 1);

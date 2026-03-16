@@ -7,13 +7,9 @@ use DateTime;
 
 class DemandeConge
 {
-    /**
-     * Calculer le nombre de jours ouvrés entre deux dates (lundi-vendredi)
-     * @param string $dateDebut Format Y-m-d
-     * @param string $dateFin Format Y-m-d
-     * @param string $demiJournee NONE|AM|PM
-     * @return float
-     */
+    
+     //Calculer le nombre de jours ouvrés entre deux dates (lundi-vendredi)
+     
     public static function calculerJoursOuvres(string $dateDebut, string $dateFin, string $demiJournee = 'NONE'): float
     {
         $debut = new DateTime($dateDebut);
@@ -28,7 +24,7 @@ class DemandeConge
         $current = clone $debut;
         
         while ($current <= $fin) {
-            $jourSemaine = (int) $current->format('w'); // 0=dimanche, 1=lundi, ..., 6=samedi
+            $jourSemaine = (int) $current->format('w'); 
             // Lundi = 1, Vendredi = 5
             if ($jourSemaine >= 1 && $jourSemaine <= 5) {
                 $joursOuvres++;
@@ -39,14 +35,6 @@ class DemandeConge
         return (float) $joursOuvres;
     }
 
-    /**
-     * Vérifier s'il y a un chevauchement avec une autre demande
-     * @param int $utilisateurId
-     * @param string $dateDebut
-     * @param string $dateFin
-     * @param int|null $exclureId ID de la demande à exclure (pour modification)
-     * @return bool
-     */
     public static function verifierChevauchement(int $utilisateurId, string $dateDebut, string $dateFin, ?int $exclureId = null): bool
     {
         $db = BaseDeDonnees::getInstance();

@@ -8,11 +8,7 @@ use PDOException;
 class BaseDeDonnees
 {
     private static ?PDO $instance = null;
-
-    /**
-     * Connexion singleton à la base de données
-     * @return PDO
-     */
+     
     public static function getInstance(): PDO
     {
         if (self::$instance === null) {
@@ -42,9 +38,6 @@ class BaseDeDonnees
         return self::$instance;
     }
 
-    /**
-     * Empêcher la duplication de l'instance
-     */
     private function __construct() {}
     private function __clone() {}
 }

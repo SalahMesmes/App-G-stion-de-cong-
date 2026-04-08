@@ -13,7 +13,6 @@ use App\Helpers\Validation;
 class ControleurManager
 {
     //Lister les demandes en attente
-     
     public function demandes(): void
     {
         Authentification::verifierManager();
@@ -94,9 +93,6 @@ class ControleurManager
         exit;
     }
 
-    /**
-     * Lister les employés
-     */
     public function employes(): void
     {
         Authentification::verifierManager();
@@ -170,9 +166,8 @@ class ControleurManager
         ]);
     }
 
-    /**
-     * Modifier un employé
-     */
+    
+     //Modifier un employé
     public function modifierEmploye(): void
     {
         Authentification::verifierManager();
@@ -201,7 +196,6 @@ class ControleurManager
                 'mot_de_passe' => $_POST['mot_de_passe'] ?? ''
             ];
 
-            // Validation
             if (empty($donnees['nom'])) $erreurs[] = 'Le nom est obligatoire.';
             if (empty($donnees['prenom'])) $erreurs[] = 'Le prénom est obligatoire.';
             if (empty($donnees['email']) || !Validation::email($donnees['email'])) {
@@ -216,19 +210,16 @@ class ControleurManager
                 $erreurs[] = 'Rôle invalide.';
             }
 
-            // Vérifier si l'email existe déjà (sauf pour cet utilisateur)
             $autreUtilisateur = Utilisateur::trouverParEmail($donnees['email']);
             if (empty($erreurs) && $autreUtilisateur && $autreUtilisateur['id'] != $id) {
                 $erreurs[] = 'Cet email est déjà utilisé.';
             }
 
-            // Mot de passe optionnel lors de la modification
             if (!empty($donnees['mot_de_passe']) && strlen($donnees['mot_de_passe']) < 6) {
                 $erreurs[] = 'Le mot de passe doit contenir au moins 6 caractères.';
             }
 
             if (empty($erreurs)) {
-                // Si pas de nouveau mot de passe, ne pas le modifier
                 if (empty($donnees['mot_de_passe'])) {
                     unset($donnees['mot_de_passe']);
                 }
@@ -252,9 +243,6 @@ class ControleurManager
         ]);
     }
 
-    /**
-     * Supprimer un employé
-     */
     public function supprimerEmploye(): void
     {
         Authentification::verifierManager();
@@ -284,9 +272,6 @@ class ControleurManager
         exit;
     }
 
-    /**
-     * Lister les types de congés
-     */
     public function typesConges(): void
     {
         Authentification::verifierManager();
@@ -299,9 +284,6 @@ class ControleurManager
         ]);
     }
 
-    /**
-     * Créer un type de congé
-     */
     public function creerTypeConge(): void
     {
         Authentification::verifierManager();
@@ -315,7 +297,6 @@ class ControleurManager
                 'libelle' => Validation::nettoyer($_POST['libelle'] ?? '')
             ];
             
-            // Ne définir les checkboxes que si elles sont cochées
             if (isset($_POST['justificatif_obligatoire'])) {
                 $donnees['justificatif_obligatoire'] = true;
             }
@@ -343,14 +324,10 @@ class ControleurManager
         ]);
     }
 
-    /**
-     * Modifier un type de congé
-     */
     public function modifierTypeConge(): void
     {
         Authentification::verifierManager();
         
-        // Récupérer l'ID depuis GET ou POST
         $id = (int) ($_GET['id'] ?? $_POST['id'] ?? 0);
         
         if ($id === 0) {
@@ -381,8 +358,7 @@ class ControleurManager
             // Validation
             if (empty($donnees['code'])) {
                 $erreurs[] = 'Le code est obligatoire.';
-            } else {
-                // Vérifier si le code existe déjà pour un autre type de congé
+            } else {// todo a verifier si c'est bon ???
                 $db = \App\Modeles\BaseDeDonnees::getInstance();
                 $stmtCheck = $db->prepare('SELECT id FROM type_conge WHERE code = ? AND id != ?');
                 $stmtCheck->execute([$donnees['code'], $id]);
@@ -415,9 +391,6 @@ class ControleurManager
         ]);
     }
 
-    /**
-     * Supprimer un type de congé
-     */
     public function supprimerTypeConge(): void
     {
         Authentification::verifierManager();

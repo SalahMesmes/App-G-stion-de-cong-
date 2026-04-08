@@ -11,9 +11,8 @@ use App\Helpers\Validation;
 
 class ControleurConge
 {
-    /**
-     * Afficher le formulaire de création de demande
-     */
+    
+     //Afficher le formulaire de création de demande
     public function creer(): void
     {
         Authentification::verifierConnexion();
@@ -100,9 +99,6 @@ class ControleurConge
         ]);
     }
 
-    /**
-     * Lister les demandes de l'utilisateur
-     */
     public function mesDemandes(): void
     {
         Authentification::verifierConnexion();
@@ -116,9 +112,6 @@ class ControleurConge
         ]);
     }
 
-    /**
-     * Voir une demande
-     */
     public function voir(): void
     {
         Authentification::verifierConnexion();
@@ -146,9 +139,6 @@ class ControleurConge
         ]);
     }
 
-    /**
-     * Annuler une demande
-     */
     public function annuler(): void
     {
         Authentification::verifierConnexion();
@@ -181,18 +171,12 @@ class ControleurConge
         exit;
     }
 
-    /**
-     * Upload d'un justificatif
-     * @param array $fichier
-     * @return string|null Nom du fichier ou null en cas d'erreur
-     */
     private function uploadJustificatif(array $fichier): ?string
     {
         if ($fichier['error'] !== UPLOAD_ERR_OK) {
             return null;
         }
 
-        // Vérifier le type de fichier (images et PDF)
         $extensionsAutorisees = ['jpg', 'jpeg', 'png', 'pdf'];
         $extension = strtolower(pathinfo($fichier['name'], PATHINFO_EXTENSION));
         

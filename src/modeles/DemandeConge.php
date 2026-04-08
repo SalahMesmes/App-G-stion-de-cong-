@@ -7,9 +7,6 @@ use DateTime;
 
 class DemandeConge
 {
-    
-     //Calculer le nombre de jours ouvrés entre deux dates (lundi-vendredi)
-     
     public static function calculerJoursOuvres(string $dateDebut, string $dateFin, string $demiJournee = 'NONE'): float
     {
         $debut = new DateTime($dateDebut);
@@ -72,11 +69,6 @@ class DemandeConge
         return (int) $result['nb'] > 0;
     }
 
-    /**
-     * Trouver une demande par son ID
-     * @param int $id
-     * @return array|false
-     */
     public static function trouverParId(int $id)
     {
         $db = BaseDeDonnees::getInstance();
@@ -95,11 +87,6 @@ class DemandeConge
         return $stmt->fetch();
     }
 
-    /**
-     * Lister les demandes d'un utilisateur
-     * @param int $utilisateurId
-     * @return array
-     */
     public static function listerParUtilisateur(int $utilisateurId): array
     {
         $db = BaseDeDonnees::getInstance();
@@ -114,10 +101,6 @@ class DemandeConge
         return $stmt->fetchAll();
     }
 
-    /**
-     * Lister toutes les demandes en attente (pour manager)
-     * @return array
-     */
     public static function listerEnAttente(): array
     {
         $db = BaseDeDonnees::getInstance();
@@ -135,11 +118,6 @@ class DemandeConge
         return $stmt->fetchAll();
     }
 
-    /**
-     * Créer une nouvelle demande
-     * @param array $donnees
-     * @return int ID de la demande créée
-     */
     public static function creer(array $donnees): int
     {
         $db = BaseDeDonnees::getInstance();
@@ -173,13 +151,6 @@ class DemandeConge
         return (int) $db->lastInsertId();
     }
 
-    /**
-     * Accepter une demande
-     * @param int $id
-     * @param int $managerId
-     * @param string|null $commentaire
-     * @return bool
-     */
     public static function accepter(int $id, int $managerId, ?string $commentaire = null): bool
     {
         $db = BaseDeDonnees::getInstance();
@@ -199,13 +170,6 @@ class DemandeConge
         return $stmt->rowCount() > 0;
     }
 
-    /**
-     * Refuser une demande
-     * @param int $id
-     * @param int $managerId
-     * @param string|null $commentaire
-     * @return bool
-     */
     public static function refuser(int $id, int $managerId, ?string $commentaire = null): bool
     {
         $db = BaseDeDonnees::getInstance();
@@ -225,11 +189,6 @@ class DemandeConge
         return $stmt->rowCount() > 0;
     }
 
-    /**
-     * Annuler une demande
-     * @param int $id
-     * @return bool
-     */
     public static function annuler(int $id): bool
     {
         $db = BaseDeDonnees::getInstance();

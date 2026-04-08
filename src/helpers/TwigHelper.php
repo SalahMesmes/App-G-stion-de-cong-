@@ -9,10 +9,8 @@ class TwigHelper
 {
     private static ?Environment $instance = null;
 
-    /**
-     * Obtenir l'instance Twig configurée
-     * @return Environment
-     */
+     @return Environment
+   
     public static function getInstance(): Environment
     {
         if (self::$instance === null) {
@@ -45,9 +43,6 @@ class TwigHelper
             // Ajouter les constantes globales
             self::$instance->addGlobal('app_name', APP_NAME);
             self::$instance->addGlobal('app_url', APP_URL);
-
-            // Ajouter l'utilisateur connecté si disponible
-            // Note: L'utilisateur sera ajouté dynamiquement dans index.php si connecté
         }
 
         return self::$instance;

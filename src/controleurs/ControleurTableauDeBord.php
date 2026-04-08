@@ -9,20 +9,16 @@ use App\Modeles\DemandeConge;
 
 class ControleurTableauDeBord
 {
-    /**
-     * Afficher le tableau de bord
-     */
+    
     public function index(): void
     {
         Authentification::verifierConnexion();
         
         $utilisateur = Authentification::getUtilisateur();
         
-        // Récupérer les dernières demandes de l'utilisateur
         $demandes = DemandeConge::listerParUtilisateur($utilisateur['id']);
-        $demandesRecentes = array_slice($demandes, 0, 5); // 5 dernières
+        $demandesRecentes = array_slice($demandes, 0, 5); 
         
-        // Statistiques
         $stats = [
             'total' => count($demandes),
             'en_attente' => count(array_filter($demandes, fn($d) => $d['statut'] === STATUT_EN_ATTENTE)),

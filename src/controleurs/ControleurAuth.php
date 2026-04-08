@@ -10,19 +10,14 @@ use App\Middleware\Authentification;
 
 class ControleurAuth
 {
-    //Afficher le formulaire de connexion
-     
     public function connexion(): void
     {
-        // Si déjà connecté rediriger vers le tableau de bord
         if (Authentification::estConnecte()) {
             header('Location: index.php?route=tableau-de-bord');
             exit;
         }
 
         $erreur = null;
-
-        // Traitement du formulaire
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $email = $_POST['email'] ?? '';
             $motDePasse = $_POST['mot_de_passe'] ?? '';
@@ -35,7 +30,6 @@ class ControleurAuth
                 $utilisateur = Utilisateur::verifierConnexion($email, $motDePasse);
                 
                 if ($utilisateur) {
-                    // Connexion réussie
                     $_SESSION['utilisateur'] = $utilisateur;
                     Flash::success('Connexion réussie. Bienvenue ' . $utilisateur['prenom'] . ' !');
                     header('Location: index.php?route=tableau-de-bord');
@@ -45,16 +39,12 @@ class ControleurAuth
                 }
             }
         }
-
-        // Afficher la vue
         $twig = TwigHelper::getInstance();
         echo $twig->render('auth/connexion.twig', [
             'erreur' => $erreur
         ]);
     }
 
-    //Déconnexion
-     
     public function deconnexion(): void
     {
         session_destroy();
